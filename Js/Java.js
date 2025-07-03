@@ -283,3 +283,10 @@ async function renderFiles() {
 }
 
 renderFiles();
+
+// Check if there's a hash in the URL
+if (window.location.hash) {
+    // Remove it without reloading the page
+    history.replaceState(null, null, window.location.pathname + window.location.search);
+}
+

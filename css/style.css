@@ -708,6 +708,11 @@ footer {
     background: rgb(255, 255, 255, 0.3);
     bottom: 0;
 }
+.label-menu-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center
+}
 
 .menu-box {
     display: flex;
@@ -819,6 +824,7 @@ footer {
     .logo-box {
         min-width: 100%;
     }
+
 }
 
 @media (max-width: 768px) {
@@ -829,6 +835,10 @@ footer {
     .bottom-footer {
         flex-direction: column;
         gap: 25px;
+    }
+    .top-footer {
+        flex-wrap: nowrap;
+        flex-direction: column;
     }
 }
 

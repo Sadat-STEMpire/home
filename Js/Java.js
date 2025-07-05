@@ -228,56 +228,50 @@ if (controls) {
     });
 }
 
-
 const GOOGLE_API_KEY = "AIzaSyAbOuIseHHX1i0gGeEDJiSxD1yswLjZCUI";
-const driveLinks = [
-    "https://drive.google.com/file/d/1Le9P8D_9Ie4cDNHTR3DjSWn3mGDCvHh4/view",
-    "https://drive.google.com/file/d/1VmbaRu_5HgvQa2nUY3wPNN-pmBsxcsxf/view",
-    "https://drive.google.com/file/d/1SS95ewhXMTsMc5X3Kjucq86WRhH5K2P9/view",
-    "https://drive.google.com/file/d/19gNQLf8LPOOSO0EW6reN5VHR00bdIEle/view",
-    "https://drive.google.com/file/d/1n6Tbzush3T-MZAPVtYJIZFl9APFJMnSU/view",
-    "https://drive.google.com/file/d/1LvIpDXwRMLX_AyDVKbrihfyI49Ojkdw7/view",
-    "https://drive.google.com/file/d/1MJWXSNM073potIj5vJF7LG0knoFQC4N_/view",
-    "https://drive.google.com/file/d/1S33HYaBTbhriKaI4V8r81n8tY9GvLqEo/view",
-    "https://drive.google.com/file/d/1G6JFO-hYWjSIhs0WNDolpzWw9HzSO9Ly/view",
-    "https://drive.google.com/file/d/11vIHAJRGiHHhpaVlUJs1r4yUBMqKr1CP/view",
-    "https://drive.google.com/file/d/1ClGw0ZRnPtnT5cWIMIieOvj2S-deITGR/view",
-    "https://drive.google.com/file/d/15gvBkX7efTErqsFle5u9gk6hXOPxUpBM/view"
-];
+const FOLDER_ID = "1-uWv6qBWPMLKDN0BC_Vu1DnHR8Z5WF92";
 
-function getFileId(link) {
-    const match = link.match(/\/d\/([a-zA-Z0-9_-]+)/);
-    return match ? match[1] : null;
-}
-
-async function getFileName(fileId) {
-    const url = `https://www.googleapis.com/drive/v3/files/${fileId}?fields=name&key=${GOOGLE_API_KEY}`;
+async function getFolderFiles() {
+    const url = `https://www.googleapis.com/drive/v3/files?q='${FOLDER_ID}'+in+parents&key=${GOOGLE_API_KEY}&fields=files(id,name,mimeType,webViewLink)`;
     try {
         const response = await fetch(url);
         const data = await response.json();
-        return data.name || "Untitled File";
+        return data.files || [];
     } catch (error) {
-        console.error("Error fetching file name:", error);
-        return "Unnamed File";
+        console.error("Error fetching files:", error);
+        return [];
     }
 }
 
 async function renderFiles() {
     const container = document.getElementById("file-container");
+    const files = await getFolderFiles();
 
-    for (const link of driveLinks) {
-        const fileId = getFileId(link);
-        if (!fileId) continue;
+    if (files.length === 0) {
+        container.innerHTML = "<p>No files found.</p>";
+        return;
+    }
 
-        const fileName = await getFileName(fileId);
+    for (const file of files) {
+        const { id, name, webViewLink, mimeType } = file;
 
         const card = document.createElement("div");
         card.className = "file-card";
+
+        // Only embed previewable types (like PDF or Google Docs)
+        let previewHTML = "";
+        if (mimeType.includes("pdf") || mimeType.includes("presentation") || mimeType.includes("document")) {
+            previewHTML = `<iframe class="pdf-preview" src="https://drive.google.com/file/d/${id}/preview" allow="autoplay"></iframe>`;
+        } else {
+            previewHTML = `<p>(Preview not supported)</p>`;
+        }
+
         card.innerHTML = `
-      <h3 class="file-name">${fileName}</h3>
-      <iframe class="pdf-preview" src="https://drive.google.com/file/d/${fileId}/preview" allow="autoplay"></iframe>
-      <a class="view-btn" href="${link}" target="_blank">Open in Drive</a>
-    `;
+            <h3 class="file-name">${name}</h3>
+            ${previewHTML}
+            <a class="view-btn" href="${webViewLink}" target="_blank">Open in Drive</a>
+        `;
+
         container.appendChild(card);
     }
 }

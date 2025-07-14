@@ -1168,3 +1168,26 @@ video#hero-video {
         background-position: 1000px 0;
     }
 }
+/* --- Responsive Mobile Adjustment --- */
+@media (max-width: 600px) {
+  .social-button {
+    width: 90%;
+    max-width: 320px;
+    height: 80px;
+    font-size: 18px;
+    padding: 0 16px;
+    margin: 10px auto;
+    border-radius: 16px;
+  }
+
+  .social-button img {
+    width: 28px;
+    height: 28px;
+    margin-right: 12px;
+  }
+
+  .social-buttons {
+    gap: 20px;
+    margin: 40px auto;
+  }
+}

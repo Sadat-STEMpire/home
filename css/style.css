@@ -707,6 +707,7 @@ footer {
     background: rgb(255, 255, 255, 0.3);
     bottom: 0;
 }
+
 .label-menu-box {
     display: flex;
     flex-direction: column;
@@ -835,6 +836,7 @@ footer {
         flex-direction: column;
         gap: 25px;
     }
+
     .top-footer {
         flex-wrap: nowrap;
         flex-direction: column;
@@ -1028,4 +1030,141 @@ video#hero-video {
     width: 20px;
     height: 20px;
     margin-right: 8px;
+}
+
+/* --- Container --- */
+.social-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    margin: 80px auto;
+    flex-wrap: wrap;
+}
+
+/* --- Shared Button Base Style --- */
+.social-button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 360px;
+    height: 100px;
+    padding: 0 20px;
+    border-radius: 20px;
+    font-family: "Segoe UI", sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: white;
+    text-decoration: none;
+    overflow: hidden;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    transition: transform 0.2s ease;
+    text-align: center;
+    z-index: 1;
+}
+
+.social-button:hover {
+    transform: scale(1.04);
+}
+
+.social-button img {
+    width: 36px;
+    height: 36px;
+    margin-right: 16px;
+    filter: invert(1);
+    z-index: 2;
+}
+
+.social-button span {
+    z-index: 2;
+    white-space: nowrap;
+}
+
+/* --- Telegram Styles --- */
+.social-button.telegram {
+    background-color: #0088cc;
+}
+
+.telegram .bg-pattern {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    width: calc(100% + 20px);
+    height: calc(100% + 20px);
+    background-image: url('https://telegram.org/img/tgme/pattern.svg?1');
+    background-size: 420px auto;
+    background-repeat: repeat;
+    mix-blend-mode: overlay;
+    opacity: 0.3;
+    animation: wobble 4s linear infinite;
+    z-index: 0;
+}
+
+.telegram::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -150%;
+    width: 300%;
+    height: 100%;
+    background-image: linear-gradient(270deg, rgba(100, 181, 239, 0) 48.44%, #64b5ef 75.52%, rgba(100, 181, 239, 0) 100%);
+    background-repeat: no-repeat;
+    animation: shine 5s linear infinite;
+    z-index: 0;
+}
+
+/* --- YouTube Styles --- */
+.social-button.youtube {
+    background-color: #FF0000;
+}
+
+.youtube .bg-shine {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -150%;
+    width: 300%;
+    height: 100%;
+    background-image: linear-gradient(270deg, rgba(255, 255, 255, 0) 48.44%, #ffffff 75.52%, rgba(255, 255, 255, 0) 100%);
+    background-repeat: no-repeat;
+    animation: shine 5s linear infinite;
+    z-index: 0;
+}
+
+.youtube img {
+    filter: brightness(0) invert(1);
+}
+
+/* --- Animations --- */
+@keyframes wobble {
+    0% {
+        transform: translateX(0px);
+    }
+
+    25% {
+        transform: translateX(-8px);
+    }
+
+    50% {
+        transform: translateX(8px);
+    }
+
+    75% {
+        transform: translateX(-4px);
+    }
+
+    100% {
+        transform: translateX(0px);
+    }
+}
+
+@keyframes shine {
+    0% {
+        background-position: -500px 0;
+    }
+
+    100% {
+        background-position: 1000px 0;
+    }
 }

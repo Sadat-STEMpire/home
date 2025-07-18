@@ -220,10 +220,9 @@ if (controls) {
 }
 
 const GOOGLE_API_KEY = "AIzaSyAbOuIseHHX1i0gGeEDJiSxD1yswLjZCUI";
-const FOLDER_ID = "1-uWv6qBWPMLKDN0BC_Vu1DnHR8Z5WF92";
 
-async function getFolderFiles() {
-    const url = `https://www.googleapis.com/drive/v3/files?q='${FOLDER_ID}'+in+parents&key=${GOOGLE_API_KEY}&fields=files(id,name,mimeType,webViewLink)`;
+async function getFolderFiles(folderId) {
+    const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents&key=${GOOGLE_API_KEY}&fields=files(id,name,mimeType,webViewLink)`;
     try {
         const response = await fetch(url);
         const data = await response.json();
@@ -236,7 +235,14 @@ async function getFolderFiles() {
 
 async function renderFiles() {
     const container = document.getElementById("file-container");
-    const files = await getFolderFiles();
+    const folderId = container.dataset.folderId;  // <-- Read folder ID from HTML
+
+    if (!folderId) {
+        container.innerHTML = "<p>Folder ID not specified.</p>";
+        return;
+    }
+
+    const files = await getFolderFiles(folderId);
 
     if (files.length === 0) {
         container.innerHTML = "<p>No files found.</p>";
@@ -249,7 +255,6 @@ async function renderFiles() {
         const card = document.createElement("div");
         card.className = "file-card";
 
-        // Only embed previewable types (like PDF or Google Docs)
         let previewHTML = "";
         if (mimeType.includes("pdf") || mimeType.includes("presentation") || mimeType.includes("document")) {
             previewHTML = `<iframe class="pdf-preview" src="https://drive.google.com/file/d/${id}/preview" allow="autoplay"></iframe>`;
@@ -258,9 +263,10 @@ async function renderFiles() {
         }
 
         card.innerHTML = `
-            <h3 class="file-name">${name}</h3>
+            <h3 class="file-name">
+                <a href="${webViewLink}" target="_blank" rel="noopener noreferrer">${name}</a>
+            </h3>
             ${previewHTML}
-            <a class="view-btn" href="${webViewLink}" target="_blank">Open in Drive</a>
         `;
 
         container.appendChild(card);

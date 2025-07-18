@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Add click event listener to each link
     links.forEach(link => {
         link.addEventListener('click', function (event) {
-            event.preventDefault(); // Prevent the default anchor behavior
+            // Removed: event.preventDefault();
 
             // Hide all concept content
             document.querySelectorAll('.concept-content').forEach(content => {
@@ -21,8 +21,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
-
-
 
 function checkAnswers(blockId) {
     const questionBlock = document.getElementById(blockId);
@@ -70,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     links.forEach(link => {
         link.addEventListener('click', function (e) {
-            e.preventDefault();
+            // Removed: e.preventDefault();
             const targetId = this.getAttribute('data-target');
             const targetElement = document.getElementById(targetId);
 
@@ -83,8 +81,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
-
-
 
 function showOnlySection(sectionId) {
     // Hide all sections first
@@ -106,7 +102,6 @@ function showOnlySection(sectionId) {
 window.onload = function () {
     let sections = document.querySelectorAll('.new-section');
     sections.forEach(section => section.style.display = 'none');
-
 }
 
 // Select the menulist and set its initial state as collapsed
@@ -137,9 +132,6 @@ document.querySelector('.menu-icon').addEventListener('click', function (event) 
     event.stopPropagation(); // Prevents closing the menu when the menu icon is clicked
 });
 
-
-
-
 const apiKey = 'AIzaSyAbOuIseHHX1i0gGeEDJiSxD1yswLjZCUI';
 
 async function fetchPlaylistVideos(playlistId, pageToken = '') {
@@ -169,9 +161,9 @@ async function loadPlaylist() {
             const videoBox = document.createElement('div');
             videoBox.className = 'video-box';
             videoBox.innerHTML = `
-        <div class="video-title">${title}</div>
-        <iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>
-      `;
+                <div class="video-title">${title}</div>
+                <iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>
+            `;
             container.appendChild(videoBox);
         });
 
@@ -180,7 +172,6 @@ async function loadPlaylist() {
 }
 
 loadPlaylist();
-
 
 /**
  * Script to play/pause the video using the controls.

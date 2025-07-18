@@ -235,19 +235,22 @@ async function getFolderFiles(folderId) {
 
 async function renderFiles() {
     const container = document.getElementById("file-container");
-    const folderId = container.dataset.folderId;  // <-- Read folder ID from HTML
+    const folderId = container.dataset.folderId;
 
     if (!folderId) {
         container.innerHTML = "<p>Folder ID not specified.</p>";
         return;
     }
 
-    const files = await getFolderFiles(folderId);
+    let files = await getFolderFiles(folderId);
 
     if (files.length === 0) {
         container.innerHTML = "<p>No files found.</p>";
         return;
     }
+
+    // Sort files alphabetically by name
+    files.sort((a, b) => a.name.localeCompare(b.name, 'en', { sensitivity: 'base' }));
 
     for (const file of files) {
         const { id, name, webViewLink, mimeType } = file;
@@ -262,9 +265,11 @@ async function renderFiles() {
             previewHTML = `<p>(Preview not supported)</p>`;
         }
 
+        const displayName = name.replace(/\.[^/.]+$/, "");  // Remove file extension
+
         card.innerHTML = `
             <h3 class="file-name">
-                <a href="${webViewLink}" target="_blank" rel="noopener noreferrer">${name}</a>
+                <a href="${webViewLink}" target="_blank" rel="noopener noreferrer">${displayName}</a>
             </h3>
             ${previewHTML}
         `;
